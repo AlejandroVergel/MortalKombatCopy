@@ -9,6 +9,9 @@ public partial class Fighter : CharacterBody2D
 	public Key JumpKey;
 	public Key CrouchKey;
 
+	// === ANIMACIONES ===
+	private AnimatedSprite2D animatedSprite2D;
+
 	// === VALORES DE MOVIMIENTO ===
 	[Export] public float MoveSpeed = 250f;
 	[Export] public float JumpForce = 3000f;
@@ -54,6 +57,10 @@ public partial class Fighter : CharacterBody2D
 		CrouchKey = Key.S;
 
 		groundCheck = GetNode<RayCast2D>("GroundCheck");
+
+		//animatedSprite2D = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+
+		//animatedSprite2D.Play(fighter + "Idle" + fighterDirection); // Animación inicial
 	}
 
 	// === UPDATE ===

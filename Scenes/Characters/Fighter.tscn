@@ -2031,17 +2031,14 @@ script = ExtResource("1_4c3fr")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="Fighter"]
 sprite_frames = SubResource("SpriteFrames_okd35")
-animation = &"DummyCrouchToStandL"
-frame = 23
-frame_progress = 0.14201537
+animation = &"DummyIdleL"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Fighter"]
 
 [node name="Marker2D" type="Marker2D" parent="Fighter"]
 
 [node name="GroundCheck" type="RayCast2D" parent="Fighter"]
-position = Vector2(0, 370)
-target_position = Vector2(0, 20)
+position = Vector2(0, 340)
 
 [node name="Camera2D" type="Camera2D" parent="."]
 
