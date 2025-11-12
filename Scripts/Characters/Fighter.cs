@@ -1,6 +1,5 @@
 using Godot;
 using System;
-using System.Numerics;
 
 public partial class Fighter : CharacterBody2D
 {
@@ -12,13 +11,17 @@ public partial class Fighter : CharacterBody2D
 
 	// === VALORES DE MOVIMIENTO ===
 	[Export] public float MoveSpeed = 250f;
-	[Export] public float JumpForce = 600f;
-	[Export] public float Gravity = 1200f;
+	[Export] public float JumpForce = 3000f;
+	[Export] public float Gravity = 9800f;
 
 	// === VARIABLES INTERNAS ===
 	private float inputX;
 	private bool isJumpPressed;
 	private bool isCrouchPressed;
+
+	// === ESTA EN EL SUELO ===
+	private RayCast2D groundCheck;
+	private bool isGrounded;
 
 	// === LECTURA DE INPUT ===
 	private void GetInput()
@@ -37,35 +40,54 @@ public partial class Fighter : CharacterBody2D
 		isCrouchPressed = Input.IsKeyPressed(CrouchKey);
 	}
 
-	// Called when the node enters the scene tree for the first time.
+	private void CheckGround()
+	{
+		isGrounded = groundCheck.IsColliding();
+	}
+
+	// === START ===
 	public override void _Ready()
 	{
 		ForwardKey = Key.D;
 		BackwardKey = Key.A;
 		JumpKey = Key.W;
 		CrouchKey = Key.S;
+
+		groundCheck = GetNode<RayCast2D>("GroundCheck");
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	// === UPDATE ===
 	public override void _Process(double delta)
 	{
 	}
 
+	// === UPDATE FISICO ===
 	public override void _PhysicsProcess(double delta) //Se llama en cada frame fisico
 	{
 		GetInput();
+		CheckGround(); //Comprueba si estamos tocando el suelo
+
+		// Aplicar movimiento horizontal
 		Velocity = new Vector2(inputX * MoveSpeed, Velocity.Y); //La velocidad en X se multiplica por MoveSpeed y la velocidad en Y se queda como estaba
-		
-		if (!IsOnFloor())
+
+		// Aplicar gravedad
+		if (!isGrounded)
 		{
-			Velocity = new Vector2(Veclocity.X, Velocity.Y + Gravity * (float)delta);
+			Velocity = new Vector2(Velocity.X, Velocity.Y + Gravity * (float)delta);
+		}
+		else if (Velocity.Y > 0)
+		{
+			Velocity = new Vector2(Velocity.X, 0);
 		}
 
-		if (isJumpPressed && IsOnFloor())
+		// Saltar
+		if (isJumpPressed && isGrounded)
 		{
-			Velocity = new Vector2(Veclocity.X, -JumpForce);
+			Velocity = new Vector2(Velocity.X, -JumpForce);
+			isGrounded = false; // Acaba de saltar
 		}
 
-		MoveAndSlide();
+		// Mover el personaje manualmente (sin MoveAndSlide)
+		Position += Velocity * (float)delta;
 	}
 }

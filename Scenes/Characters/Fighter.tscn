@@ -1,6 +1,7 @@
-[gd_scene load_steps=498 format=3 uid="uid://bsitlp4qp5uv5"]
+[gd_scene load_steps=500 format=3 uid="uid://bsitlp4qp5uv5"]
 
 [ext_resource type="Script" uid="uid://diepefmxj04a3" path="res://Scripts/Characters/Fighter.cs" id="1_4c3fr"]
+[ext_resource type="Texture2D" uid="uid://bti10s71qblsx" path="res://Sprites/maxresdefault.jpg" id="1_74c7q"]
 [ext_resource type="Texture2D" uid="uid://ec38vuxqdixr" path="res://Sprites/Characters/Dummy/Left/DummyCrouchL/DummyCrouch0000.png" id="2_l1g21"]
 [ext_resource type="Texture2D" uid="uid://bt17xcwov83nl" path="res://Sprites/Characters/Dummy/Left/DummyCrouchL/DummyCrouch0001.png" id="3_74c7q"]
 [ext_resource type="Texture2D" uid="uid://do3461acsqhq0" path="res://Sprites/Characters/Dummy/Left/DummyCrouchL/DummyCrouch0002.png" id="4_vslss"]
@@ -2015,15 +2016,38 @@ animations = [{
 "speed": 60.0
 }]
 
-[node name="Fighter" type="CharacterBody2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vslss"]
+
+[node name="Main" type="Node2D"]
+
+[node name="Maxresdefault" type="Sprite2D" parent="."]
+visible = false
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("1_74c7q")
+
+[node name="Fighter" type="CharacterBody2D" parent="."]
+position = Vector2(-437, -19)
 script = ExtResource("1_4c3fr")
 
-[node name="Sprite" type="AnimatedSprite2D" parent="."]
+[node name="Sprite" type="AnimatedSprite2D" parent="Fighter"]
 sprite_frames = SubResource("SpriteFrames_okd35")
 animation = &"DummyCrouchToStandL"
 frame = 23
 frame_progress = 0.14201537
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fighter"]
 
-[node name="Marker2D" type="Marker2D" parent="."]
+[node name="Marker2D" type="Marker2D" parent="Fighter"]
+
+[node name="GroundCheck" type="RayCast2D" parent="Fighter"]
+position = Vector2(0, 370)
+target_position = Vector2(0, 20)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Ground" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground"]
+position = Vector2(0, 460)
+scale = Vector2(96, 8)
+shape = SubResource("RectangleShape2D_vslss")
